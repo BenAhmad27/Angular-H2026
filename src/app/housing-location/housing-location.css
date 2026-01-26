@@ -1,30 +1,48 @@
-.listing {
-  background: var(--accent-color);
-  border-radius: 30px;
-  padding-bottom: 30px;
+.housing-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  overflow: hidden; /* Pour que l'image respecte les bords arrondis de la carte */
 }
-.listing-heading {
-  color: var(--primary-color);
-  padding: 10px 20px 0 20px;
+
+/* Effet d'élévation au survol (Feedback UX) */
+.housing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2) !important;
+  cursor: pointer;
 }
-.listing-photo {
-  height: 250px;
-  width: 100%;
+
+/* Image */
+[mat-card-image] {
+  height: 200px;
   object-fit: cover;
-  border-radius: 30px 30px 0 0;
 }
-.listing-location {
-  padding: 10px 20px 20px 20px;
+
+/* Contenu */
+.listing-heading {
+  margin: 16px 0 8px 0;
+  font-size: 1.2rem;
+  color: #333;
 }
-.listing-location::before {
-  content: url('/public/location-pin.svg') / '';
+
+.location-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #666;
+  font-size: 0.9rem;
 }
-section.listing a {
-  padding-left: 20px;
-  text-decoration: none;
-  color: var(--primary-color);
+
+.location-text mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #5d5fef; /* Votre couleur d'accent */
 }
-section.listing a::after {
-  content: '\203A';
-  margin-left: 5px;
+
+/* Actions */
+mat-card-actions {
+  margin-top: auto; /* Pousse le bouton vers le bas si les titres n'ont pas la même longueur */
+  padding: 8px 16px;
 }

@@ -21,3 +21,49 @@ button.primary {
   color: white;
   border-radius: 8px;
 }
+
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh; /* Centre verticalement dans la page */
+  padding: 20px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.auth-form mat-form-field {
+  width: 100%;
+}
+
+.auth-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+mat-card-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+}
+
+mat-card-footer {
+  text-align: center;
+  padding-bottom: 10px;
+}
