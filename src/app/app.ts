@@ -2,6 +2,8 @@ import { Component, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
+import { AuthService } from './service/auth-s';
+
 import { Router } from '@angular/router';
 
 // Imports Material
@@ -36,21 +38,33 @@ import { map, shareReplay } from 'rxjs/operators';
 
         <mat-toolbar color="primary">
           <button type="button" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
-            <mat-icon aria-label="Menu">menu</mat-icon>
+            <mat-icon>menu</mat-icon>
           </button>
           
-          <img class="brand-logo" src="/logo.svg" alt="logo" style="height: 40px; margin-right: 10px;">
-         
-
-          <span style="flex: 1 1 auto;"></span> 
-
-          <button mat-button routerLink="login">
-            <mat-icon>login</mat-icon> CONNEXION
+          <img class="brand-logo" src="/logo.svg" alt="logo" style="height: 40px; margin-right: 10px;" routerLink="/">
+          <span style="flex: 1 1 auto;"></span>
+          
+          <button mat-button routerLink="/">
+            <mat-icon>home</mat-icon> ACCUEIL
           </button>
 
-          <button mat-button (click)="logout()">
-            <mat-icon>logout</mat-icon> DÉCONNEXION
-          </button>
+          @if (auth.isLoggedIn) {
+            <button mat-button routerLink='locations'>
+              <mat-icon>apartment</mat-icon> MES LOCATIONS
+            </button>
+            
+            <span class="user-welcome" style="margin-left: 10px; font-size: 0.8rem; opacity: 0.8;">
+              {{ auth.currentUser?.email }}
+            </span>
+
+            <button mat-icon-button (click)="logout()" matTooltip="Déconnexion">
+              <mat-icon>logout</mat-icon>
+            </button>
+          } @else {
+            <button mat-raised-button color="accent" routerLink="login">
+              <mat-icon>login</mat-icon> CONNEXION
+            </button>
+          }
         </mat-toolbar>
 
         <main class="content">
@@ -68,29 +82,18 @@ import { map, shareReplay } from 'rxjs/operators';
     .brand-logo { filter: brightness(0) invert(1); } /* Si logo noir sur toolbar bleue */
   `]
 })
+
+// app.ts
 export class App {
   private breakpointObserver = inject(BreakpointObserver);
   private router = inject(Router);
+  public auth = inject(AuthService); // Injectez l'AuthService public pour le template
 
-  // Observable qui détecte si on est sur mobile (< 600px)
   isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches),
-      shareReplay()
-    );
-
-  closeSideNav(drawer: any) {
-    this.isHandset$.subscribe(isMobile => {
-      if (isMobile) drawer.close();
-    });
-  }
-
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('user_token');
-  }
+    .pipe(map(result => result.matches), shareReplay());
 
   logout() {
-    localStorage.removeItem('user_token'); // On détruit la session
-    this.router.navigate(['/']); // Retour au Login
+    this.auth.logOut();
+    this.router.navigate(['/login']);
   }
 }

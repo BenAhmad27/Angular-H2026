@@ -1,31 +1,74 @@
-import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
+import { Component, inject, signal } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+
+import { AuthService } from '../service/auth-s';
+import { UserCredentials } from '../models/user-credential';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
   imports: [
-    RouterLink,
-    MatCardModule, 
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule
+    RouterModule, FormsModule,
+    MatFormFieldModule, MatInputModule, MatIconModule, MatButtonModule
   ],
-  templateUrl: './login.html',
-  styleUrl: './login.css',
-})
-export class Login {
-  private router = inject(Router);
+  template: `
+    <form (submit)="handleSubmit(usernameInput.value, passwordInput.value)">
+        @if (error()) {
+            <div id="error">
+                {{ error() }}
+            </div>
+        }
 
-  // Cette fonction s'exécute au clic et change de page immédiatement
-  onLogin() {
-    localStorage.setItem('user_token', 'active'); 
-    this.router.navigate(['/home']); 
-  }
+        <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <input #usernameInput matInput>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input #passwordInput matInput type="password">
+        </mat-form-field>
+
+        <div id="buttons">
+            <button mat-flat-button>Log in</button>
+
+            <a mat-button routerLink="/signup">Create an account!</a>
+        </div>
+    </form>
+  `,
+  styles: `
+    #error {
+        background-color: pink;
+        border-radius: 4px;
+        padding: 8px;
+        margin-bottom: 16px;
+        color: darkred;
+    }
+  `
+})
+export class LoginPage {
+    private readonly router = inject(Router)
+    private readonly auth = inject(AuthService)
+
+    error = signal<string | null>(null)
+
+    handleSubmit(username: string, password: string) {
+
+        const credentials = new UserCredentials({ username, password })
+
+        this.auth.logIn(credentials).subscribe( success => {
+            if (success) {
+                this.router.navigate(['/'])
+            }
+            else {
+                this.error.set('Invalid credentials')
+            }
+        })
+
+    }
 }

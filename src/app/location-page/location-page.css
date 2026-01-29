@@ -1,0 +1,60 @@
+#header {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        gap: 16px;
+    }
+
+    #header mat-icon {
+        margin: 0;
+    }
+
+    .mat-mdc-row {
+        background-color: white;
+        color: var(--mat-on-sys-secondary);
+    }
+
+    .mat-mdc-header-row {
+        color: var(--mat-on-sys-secondary);
+        background-color: var(--mat-sys-secondary);
+    }
+
+    .mat-mdc-row:hover .mat-mdc-cell {
+        background-color: color-mix(in lab, var(--mat-sys-secondary) 30%, transparent 100%);
+    }
+
+    .add {
+        --color: var(--mat-button-filled-label-text-color, var(--mat-sys-on-primary));
+
+        background-color: var(--mat-sys-surface-tint);
+    }
+
+    .edit {
+        --color: rgb(255, 165, 0);
+        background-color: color-mix(in lab, var(--mat-sys-secondary) 30%, transparent 100%);
+    }
+
+    a[matIconButton] {
+        color: var(--color);
+
+        /* https://www.fusonic.net/en/blog/angular-material-customization */
+        --mat-icon-button-ripple-color: color-mix(in lab, var(--color) 10%, transparent 100%);
+        --mat-icon-button-hover-state-layer-opacity: .8;
+        --mat-icon-button-state-layer-color: color-mix(in lab, var(--mat-sys-secondary) 100%, transparent 100%);
+    }
+
+    .mat-column-actions, .mat-column-laundry, .mat-column-wifi, mat-column-availableUnits, mat-column-state {
+        width: 0px;
+    }
+
+    .mat-column-availableUnits, .mat-column-laundry, .mat-column-wifi, .mat-column-state {
+        text-align: center
+    }
+
+    .availability[available=true] {
+      color: green;
+    }
+
+    .availability[available=false] {
+      color: red;
+    }

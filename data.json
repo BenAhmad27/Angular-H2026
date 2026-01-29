@@ -1,0 +1,12 @@
+[
+  {
+    "name": "users-login",
+    "string": "select email from users where email = '?email' && passwd = sha2('?password', 256);",
+    "type": 0
+  },
+  {
+    "name": "users-signup",
+    "string": "insert into users(email, passwd) values ('?email', sha2('?password', 256));",
+    "type": 1
+  }
+]

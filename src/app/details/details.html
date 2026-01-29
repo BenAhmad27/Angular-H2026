@@ -1,61 +1,77 @@
-<article class="details-container">
-  <img class="main-photo" [src]="housingLocation?.photo" alt="Photo of {{ housingLocation?.name }}">
+@if (housingLocation()) {
+  <article class="details-container">
+    <img class="main-photo" 
+         [src]="housingLocation()?.photo" 
+         alt="Photo of {{ housingLocation()?.name }}">
 
-  <div class="details-content">
-    <section>
-      <h1 class="main-title">{{ housingLocation?.name }}</h1>
-      <p class="location-subtitle">
-        <mat-icon color="primary">location_on</mat-icon>
-        {{ housingLocation?.city }}, {{ housingLocation?.state }}
-      </p>
+    <div class="details-content">
+      <section>
+        <h1 class="main-title">{{ housingLocation()?.name }}</h1>
+        <p class="location-subtitle">
+          <mat-icon color="primary">location_on</mat-icon>
+          {{ housingLocation()?.city }}, {{ housingLocation()?.state }}
+        </p>
 
-      <mat-chip-set aria-label="Housing features">
-        <mat-chip>
-          <mat-icon matChipAvatar>key</mat-icon>
-          {{ housingLocation?.availableUnits }} unités
-        </mat-chip>
-        <mat-chip [disabled]="!housingLocation?.wifi">
-          <mat-icon matChipAvatar>{{ housingLocation?.wifi ? 'wifi' : 'wifi_off' }}</mat-icon>
-          WiFi
-        </mat-chip>
-        <mat-chip [disabled]="!housingLocation?.laundry">
-          <mat-icon matChipAvatar>local_laundry_service</mat-icon>
-          Buanderie
-        </mat-chip>
-      </mat-chip-set>
-    </section>
+        <mat-chip-set aria-label="Housing features">
+          <mat-chip>
+            <mat-icon matChipAvatar>key</mat-icon>
+            {{ housingLocation()?.availableUnits }} unités
+          </mat-chip>
+          
+          <mat-chip [disabled]="!housingLocation()?.wifi">
+            <mat-icon matChipAvatar>{{ housingLocation()?.wifi ? 'wifi' : 'wifi_off' }}</mat-icon>
+            WiFi
+          </mat-chip>
+          
+          <mat-chip [disabled]="!housingLocation()?.laundry">
+            <mat-icon matChipAvatar>local_laundry_service</mat-icon>
+            Buanderie
+          </mat-chip>
+        </mat-chip-set>
+      </section>
 
-    <mat-divider></mat-divider>
+      <mat-divider></mat-divider>
 
-    <section class="apply-section">
-      <h2 class="section-heading">Candidature en ligne</h2>
-      <form [formGroup]="applyForm" (submit)="submitApplication()">
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Prénom</mat-label>
-            <input matInput formControlName="firstName">
-            <mat-error *ngIf="applyForm.get('firstName')?.hasError('required')">Requis</mat-error>
+      <section class="apply-section">
+        <h2 class="section-heading">Candidature en ligne</h2>
+        <form [formGroup]="applyForm" (submit)="submitApplication()">
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Prénom</mat-label>
+              <input matInput formControlName="firstName">
+              @if (applyForm.get('firstName')?.hasError('required')) {
+                <mat-error>Requis</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Nom</mat-label>
+              <input matInput formControlName="lastName">
+              @if (applyForm.get('lastName')?.hasError('required')) {
+                <mat-error>Requis</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="exemple@mail.com">
+            <mat-icon matSuffix>alternate_email</mat-icon>
+            @if (applyForm.get('email')?.hasError('email')) {
+              <mat-error>Format invalide</mat-error>
+            }
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Nom</mat-label>
-            <input matInput formControlName="lastName">
-            <mat-error *ngIf="applyForm.get('lastName')?.hasError('required')">Requis</mat-error>
-          </mat-form-field>
-        </div>
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" placeholder="exemple@mail.com">
-          <mat-icon matSuffix>alternate_email</mat-icon>
-          <mat-error *ngIf="applyForm.get('email')?.hasError('email')">Format invalide</mat-error>
-        </mat-form-field>
-
-        <button mat-shadow-button mat-raised-button color="primary" 
-                type="submit" [disabled]="!applyForm.valid">
-          ENVOYER MA DEMANDE
-        </button>
-      </form>
-    </section>
+          <button mat-raised-button color="primary" 
+                  type="submit" [disabled]="!applyForm.valid">
+            ENVOYER MA DEMANDE
+          </button>
+        </form>
+      </section>
+    </div>
+  </article>
+} @else {
+  <div class="loading-container">
+    <p>Chargement des informations du logement...</p>
   </div>
-</article>
+}

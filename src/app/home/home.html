@@ -9,14 +9,17 @@
              #filter 
              [value]="route.snapshot.queryParamMap.get('city') || ''"
              (keyup.enter)="updateSearch(filter.value)" />
+      @if (filter.value){
+        <button matSuffix mat-icon-button aria-label="Clear" 
+                (click)="filter.value=''; updateSearch('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
       
-      <button matSuffix mat-icon-button aria-label="Clear" 
-              *ngIf="filter.value" 
-              (click)="filter.value=''; updateSearch('')">
-        <mat-icon>close</mat-icon>
-      </button>
-
-      <mat-icon matPrefix *ngIf="!filter.value">location_city</mat-icon>
+      @if (!filter.value){
+        <mat-icon matPrefix>location_city</mat-icon>
+      }
+      
     </mat-form-field>
 
     <button mat-raised-button color="primary" type="button" (click)="updateSearch(filter.value)">
@@ -27,11 +30,11 @@
 </section>
 
 <div class="results-summary">
-  <p><strong>{{ filteredLocationList.length }}</strong> logement(s) trouvé(s)</p>
+  <p><strong>{{ filteredLocationList().length }}</strong> logement(s) trouvé(s)</p>
 </div>
 
 <section class="results">
-  @for (housingLocation of filteredLocationList; track housingLocation.id) {
+  @for (housingLocation of filteredLocationList(); track housingLocation.id) {
     <app-housing-location [housingLocation]="housingLocation" />
   } @empty {
     <p class="no-results">Aucun logement trouvé pour cette ville.</p>
